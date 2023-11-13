@@ -1,5 +1,5 @@
 # DEVELOPER INFORMATIONS
-> This command is to build the project: `./src/build/build`.
+> _This command is to build the project: `./src/build/build`._
 
 # CLIENT INFORMATIONS
 > This command is to run a Lumix file: `./src/cli/cli.bat ./index.lum`.
