@@ -1,6 +1,3 @@
-# DEVELOPER INFORMATIONS
-> This command is to build the project: `./src/build/build`.
-
 # CLIENT INFORMATIONS
 > This command is to run a Lumix file: `./src/cli/lumix.bat ./index.lum`.
 
