@@ -1,0 +1,5 @@
+#*
+auto test = "test";
+*#
+auto message = 'Hello, world!';
+print(message);
