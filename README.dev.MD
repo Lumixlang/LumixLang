@@ -15,7 +15,7 @@ As we know the lexer is a important part of the programming language and in Lumi
 ## Syntax
 Here's an example of Lumix syntax.
 ```
-import("basics");
+import std.stdio;
 
 obj options = {
     "message": "Hello, world!"
