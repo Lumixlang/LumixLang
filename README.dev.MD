@@ -1,5 +1,8 @@
 # Developers Information
 
+# Building Lumix
+This command is to build the project: `./src/build/build`.
+
 ## Libraries
 First things first when we will get to the creation of libraries we will need to code this part in Lumix and not in C or any other programming languages. This will make it easier for others to create libraries for the programming language and also simplify there tasks. Note that they should still be able to add C to there library.
 
