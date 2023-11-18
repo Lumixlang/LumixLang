@@ -1,7 +1,13 @@
 # Developers Information
 
+# Where Do I Go?
+If you're new to the Lumix developers team welcome! To understand where to code here are the important paths:
+> Main entry: ./src/compiler/main/ | Here you will find the main entry of the Lumix program.
+> Lexer: ./src/compiler/lexer/ | Here you will find all what you need to code the lexer.
+> File Reader: ./src/compiler/fileReader/ | Here you will find all what is related to reading a Lumix type file.
+
 # Building Lumix
-This command is to build the project: `& "C:\Program Files (x86)\GnuWin32\bin\make.exe"`.
+This command is to build the project: `& "C:\Program Files (x86)\GnuWin32\bin\make.exe"` or the path to your `make.exe`.
 
 ## Libraries
 First things first when we will get to the creation of libraries we will need to code this part in Lumix and not in C or any other programming languages. This will make it easier for others to create libraries for the programming language and also simplify there tasks. Note that they should still be able to add C to there library.
