@@ -2,6 +2,7 @@
 
 # Where Do I Go?
 If you're new to the Lumix developers team welcome! To understand where to code here are the important paths:
+
 Main entry: ./src/compiler/main/ | Here you will find the main entry of the Lumix program.
 
 Lexer: ./src/compiler/lexer/ | Here you will find all what you need to code the lexer.
