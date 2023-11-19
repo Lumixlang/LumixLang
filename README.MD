@@ -1,5 +1,38 @@
-# CLIENT INFORMATIONS
-> This command is to run a Lumix file: `./src/cli/lumix.bat ./index.lum`.
+# Lumix
 
-If you are wondering why it's `./src/cli/cli.bat`? We got an explanation!
-Basicly we still didn't create a full CLI so you still need to run the batch file. As soon as possible when you will install Lumix you will get the computer variable with it so the command would be `lum ./index.lum`;
+## Overview
+
+Lumix is a programming language designed for [insert purpose]. This README provides instructions on how to run Lumix files using the command-line interface (CLI).
+
+## Getting Started
+
+### Prerequisites
+
+Make sure you have the following prerequisites installed on your system:
+
+- Lumix Compiler
+- [Add any other prerequisites]
+
+### Installation
+
+[Provide instructions on how to install Lumix on different operating systems. Include any specific steps or dependencies.]
+
+## Running Lumix Files
+
+To run a Lumix file, you can use the Lumix CLI. Currently, you can run a Lumix file using the provided batch file:
+
+\```bash
+./src/cli/lumix.bat ./index.lum
+\```
+
+Explanation: The command above runs the Lumix batch file, passing the Lumix file `index.lum` as an argument.
+
+### Future CLI Usage
+
+Once Lumix is fully equipped with a CLI, you'll be able to use a simpler command:
+
+\```bash
+lum ./index.lum
+\```
+
+This assumes that Lumix has been added to your system's PATH during installation.
