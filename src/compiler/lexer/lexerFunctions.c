@@ -58,7 +58,6 @@ int startsEndsChar(char *data, char start, char end) {
     return data[0] == start && data[strlen(data) - 1] == end;
 }
 
-// Needs to not only be for quotes but also for {}, [] and //.
 char **tokenizeWithoutQuotes(const char *input) {
     char line[256];
     strncpy(line, input, sizeof(line));
@@ -68,17 +67,32 @@ char **tokenizeWithoutQuotes(const char *input) {
     char *rest = line;
     int insideQuotes = 0;
     int count = 0;
-    while ((token = strtok_r(rest, "\"'", &rest))) {
+    while ((token = strtok_r(rest, "\"'{}[]/", &rest))) {
         if (insideQuotes) {
-            if (input[strlen(input) - strlen(rest) - 1] == '"') {
+            if (input[strpbrk(input, "\"'{}[]/") - input] == '"' && input[strlen(input) - strlen(rest) - 1] == '"') {
                 tokens = realloc(tokens, (count + 1) * sizeof(char *));
                 tokens[count] = malloc(strlen(token) + 3);
                 sprintf(tokens[count], "\"%s\"", token);
                 count++;
-            } else if (input[strlen(input) - strlen(rest) - 1] == '\'') {
+            } else if (input[strpbrk(input, "\"'{}[]/") - input] == '\'' && input[strlen(input) - strlen(rest) - 1] == '\'') {
                 tokens = realloc(tokens, (count + 1) * sizeof(char *));
                 tokens[count] = malloc(strlen(token) + 3);
                 sprintf(tokens[count], "\'%s\'", token);
+                count++;
+            } else if (input[strpbrk(input, "\"'{}[]/") - input] == '{' && input[strlen(input) - strlen(rest) - 1] == '}') {
+                tokens = realloc(tokens, (count + 1) * sizeof(char *));
+                tokens[count] = malloc(strlen(token) + 3);
+                sprintf(tokens[count], "{%s}", token);
+                count++;
+            } else if (input[strpbrk(input, "\"'{}[]/") - input] == '[' && input[strlen(input) - strlen(rest) - 1] == ']') {
+                tokens = realloc(tokens, (count + 1) * sizeof(char *));
+                tokens[count] = malloc(strlen(token) + 3);
+                sprintf(tokens[count], "[%s]", token);
+                count++;
+            }  else if (input[strpbrk(input, "\"'{}[]/") - input] == '/' && input[strlen(input) - strlen(rest) - 1] == '/') {
+                tokens = realloc(tokens, (count + 1) * sizeof(char *));
+                tokens[count] = malloc(strlen(token) + 3);
+                sprintf(tokens[count], "/%s/", token);
                 count++;
             }
         } else {
