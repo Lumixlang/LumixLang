@@ -1,5 +1,7 @@
 # Developers Information
 
+Note: Lumix uses GCC to compile the code.
+
 # Where Do I Go?
 If you're new to the Lumix developers team welcome! To understand where to code here are the important paths:
 > Main entry: ./src/compiler/main/ | Here you will find the main entry of the Lumix program.
@@ -47,4 +49,13 @@ void main() {
         exit(1);
     }
 }
+```
+
+Lon (Lumix Object Notation):
+```
+MessageOne: (Hello, world!)
+MessageTwo: 2
+Third: true
+Fourth: 1, 2, 3, 4, 5
+(Something Else): (Hello, ), (world!)
 ```
