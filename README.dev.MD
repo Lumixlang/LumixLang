@@ -32,7 +32,7 @@ As we know the lexer is a important part of the programming language and in Lumi
 ## Syntax
 Here's an example of Lumix syntax.
 ```
-import std.stdio;
+import std.io;
 
 obj options = {
     "message": "Hello, world!"
