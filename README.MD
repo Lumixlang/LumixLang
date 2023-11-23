@@ -40,3 +40,13 @@ lumix ./index.lum
 ```
 
 This assumes that Lumix has been added to your system's PATH during installation.
+
+### More
+#### Contribute
+To know more about contributing to the Lumix project you can go to the [CONTRIBUTING.MD](./CONTRIBUTING.MD) file.
+#### Licence
+To read the Lumix licence you can go to this file: [LICENCE](./LICENCE).
+#### Security
+To read on the Lumix security you can go to this file: [SECURITY.MD](./SECURITY.MD).
+#### Change Log
+To read the change log of Lumix you can go to this file: [CHANGELOG.MD](./CHANGELOG.MD).
