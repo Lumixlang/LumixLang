@@ -16,6 +16,13 @@ This command is to run Lumix using the Makefile: `& "C:\Program Files (x86)\GnuW
 ## Libraries
 First things first when we will get to the creation of libraries we will need to code this part in Lumix and not in C or any other programming languages. This will make it easier for others to create libraries for the programming language and also simplify there tasks. Note that they should still be able to add C to there library.
 
+### Intergrated Libraries
+#### std.io:
+This import will be to import the library that has the inputs and outputs (IO: Input, Output).
+
+#### std.fs:
+This import will be to get all what is related to files: reading, writing, checking existance and ect...
+
 ## Structure
 So when we come to the structure of Lumix well there will be a main entry for the program that can be automatic, what I mean by that is: 'auto main()' so that the return isn't specified to something like 'int' or 'str'. For the programming language scopes we will use the '{}' way. Example: `auto main() {Here is the code of the function}`. This way the code is clear and can be clear even if it is compacted without any lines.
 

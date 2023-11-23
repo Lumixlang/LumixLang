@@ -1,9 +1,8 @@
 #include <stdio.h>
 
-extern void asm_function();
+extern int asm_function();
 
 int main() {
-    asm_function();
-
+    asm_function();    
     return 0;
 }
