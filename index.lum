@@ -1,1 +1,1 @@
-obj x = {test: test2};
+if (something == something) {print("test")}

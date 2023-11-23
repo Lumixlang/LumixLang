@@ -160,3 +160,54 @@ char* removeCommentsInsideStrings(const char* input) {
     result[resultIndex] = '\0';
     return result;
 }
+
+char **tokenizeLines(char *str, int *numTokens) {
+    char *line;
+    int insideBraces = 0;
+    int capacity = 10;  // Initial capacity for tokens array
+    int count = 0;     // Number of tokens
+    char **tokens = malloc(capacity * sizeof(char *));
+
+    if (tokens == NULL) {
+        perror("Memory allocation failed");
+        exit(EXIT_FAILURE);
+    }
+
+    line = strtok(str, ";\n");
+    while (line != NULL) {
+        // Check if the line contains an opening brace '{'
+        if (strchr(line, '{') != NULL) {
+            insideBraces = 1;
+        }
+
+        // Tokenize the line if not inside braces
+        if (!insideBraces) {
+            tokens[count] = strdup(line);
+            if (tokens[count] == NULL) {
+                perror("Memory allocation failed");
+                exit(EXIT_FAILURE);
+            }
+            count++;
+
+            // Resize tokens array if needed
+            if (count >= capacity) {
+                capacity *= 2;
+                tokens = realloc(tokens, capacity * sizeof(char *));
+                if (tokens == NULL) {
+                    perror("Memory allocation failed");
+                    exit(EXIT_FAILURE);
+                }
+            }
+        }
+
+        // Check if the line contains a closing brace '}'
+        if (strchr(line, '}') != NULL) {
+            insideBraces = 0;
+        }
+
+        line = strtok(NULL, ";\n");
+    }
+
+    *numTokens = count;
+    return tokens;
+}

@@ -6,34 +6,48 @@
 
 #include "./headers/lexerFunctions.h"
 
+#define STDMAX 50
+
 struct Token {
+    // Function
     struct Function {
         struct KeywordFunction {
-            char value[50];
+            char value[STDMAX];
         } keywordFunction;
         struct InsideFunction {
-            char value[50];
+            char value[STDMAX];
             char type[10];
         } insideFunction;
     } function;
+    // Variable
     struct Variable {
         struct TypeVariable {
-            char value[50];
+            char value[STDMAX];
         } typeVariable;
         struct NameVariable {
-            char value[50];
+            char value[STDMAX];
         } nameVariable;
         struct Operator {
-            char value[50];
+            char value[STDMAX];
         } OperatorVariable;
-        struct Inside {
-            char value[50];
-            char type[50];
+        struct InsideVariable {
+            char value[STDMAX];
+            char type[STDMAX];
         } insideVariable;
     } variable;
+    // If Statement
+    struct IfStatement {
+        struct Statement {
+            char value[STDMAX];
+        } statementIfStatement;
+        struct InsideIfStatement {
+            char value[STDMAX];
+        } insideIfStatement;
+    } ifStatement;
+    // Error
     struct Error {
             char message[100];
-            char codePart[50];
+            char codePart[STDMAX];
     } error;
 };
 
@@ -47,43 +61,102 @@ struct Token* lex(char *str) {
 
     char *line = strtok(str, ";\n");
     while (line != NULL) {
-        char keywordFunction[50];
-        char insideFunction[50];
+        // If statement
+        char insideStatement[STDMAX];
+        char codeInsideStatement[STDMAX];
+        enum { START, INSIDE_IF, INSIDE_CONDITION, INSIDE_CODE, INSIDE_STRING } state = START;
+        int insideIndex = 0;
+        int codeIndex = 0;
+        // Iterate through each character in the input string
+        for (int i = 0; line[i] != '\0'; ++i) {
+            switch (state) {
+                case START:
+                    if (line[i] == 'i' && strncmp(&line[i], "if", 2) == 0) {
+                        state = INSIDE_IF;
+                        i += 2;  // Skip "if" characters
+                    }
+                    break;
+                case INSIDE_IF:
+                    if (line[i] == '(') {
+                        state = INSIDE_CONDITION;
+                    } else if (line[i] == ' ') {
+                        // Ignore spaces
+                    } else {
+                        // Invalid syntax
+                        strcpy(token->error.codePart, line);
+                        strcpy(token->error.message, "Missing the opening parenthesis.");
+                        exit(1);
+                    }
+                    break;
+                case INSIDE_CONDITION:
+                    if (line[i] == ')') {
+                        state = INSIDE_CODE;
+                    } else {
+                        insideStatement[insideIndex++] = line[i];
+                    }
+                    break;
+                case INSIDE_CODE:
+                    if (line[i] == '{') {
+                        state = INSIDE_STRING;  // Assume the code block starts with a string
+                    }
+                    break;
+                case INSIDE_STRING:
+                    if (line[i] == '}') {
+                        state = START;
+                    } else {
+                        codeInsideStatement[codeIndex++] = line[i];
+                    }
+                    break;
+            }
+        }
+
+        // Null-terminate the strings
+        insideStatement[insideIndex] = '\0';
+        codeInsideStatement[codeIndex] = '\0';
+
+        strcpy(token->ifStatement.insideIfStatement.value, codeInsideStatement);
+        strcpy(token->ifStatement.statementIfStatement.value, insideStatement);
+
+        char keywordFunction[STDMAX];
+        char insideFunction[STDMAX];
 
         // Function
         if (sscanf(line, "%49[^(\n] (%49[^)\n]", keywordFunction, insideFunction) == 2) {
-            strcpy(token->function.keywordFunction.value, keywordFunction);
-            strcpy(token->function.insideFunction.value, insideFunction);
-            if (startsEndsChar(token->function.insideFunction.value, '\'', '\'') || startsEndsChar(token->function.insideFunction.value, '"', '"')) {
-                strcpy(token->function.insideFunction.type, "string");
-            } else if (isNumeric(token->function.insideFunction.value)) {
-                strcpy(token->function.insideFunction.type, "integer");
-            } else if (isBoolean(token->function.insideFunction.value)) {
-                strcpy(token->function.insideFunction.type, "boolean");
-            } else if (token->function.insideFunction.value[0] == '{' && token->function.insideFunction.value[strlen(token->function.insideFunction.value) - 1] == '}') {
-                strcpy(token->function.insideFunction.type, "object");
-            } else if (token->function.insideFunction.value[0] == '[' && token->function.insideFunction.value[strlen(token->function.insideFunction.value) - 1] == ']') {
-                strcpy(token->function.insideFunction.type, "enumeration");
-            } else if (token->function.insideFunction.value[0] == '/' && token->function.insideFunction.value[strlen(token->function.insideFunction.value) - 1] == '/') {
-                strcpy(token->function.insideFunction.type, "regular expression");
-            } else if (isAlphabetic(token->function.insideFunction.value)) {
-                strcpy(token->function.insideFunction.type, "variable");
-                // NEED TO CHECK IF THE VARIABLE SELECTED IS A TYPE STRING.
-            } else {
-                strcpy(token->error.message, "Didn't find the type.");
-                strcpy(token->error.codePart, line);
-                exit(1);
+            if (!strcmp(keywordFunction, "if")) { // Doesn't collide with the keywords
+                strcpy(token->function.keywordFunction.value, keywordFunction);
+                strcpy(token->function.insideFunction.value, insideFunction);
+                if (startsEndsChar(token->function.insideFunction.value, '\'', '\'') || startsEndsChar(token->function.insideFunction.value, '"', '"')) {
+                    strcpy(token->function.insideFunction.type, "string");
+                } else if (isNumeric(token->function.insideFunction.value)) {
+                    strcpy(token->function.insideFunction.type, "integer");
+                } else if (isBoolean(token->function.insideFunction.value)) {
+                    strcpy(token->function.insideFunction.type, "boolean");
+                } else if (token->function.insideFunction.value[0] == '{' && token->function.insideFunction.value[strlen(token->function.insideFunction.value) - 1] == '}') {
+                    strcpy(token->function.insideFunction.type, "object");
+                } else if (token->function.insideFunction.value[0] == '[' && token->function.insideFunction.value[strlen(token->function.insideFunction.value) - 1] == ']') {
+                    strcpy(token->function.insideFunction.type, "enumeration");
+                } else if (token->function.insideFunction.value[0] == '/' && token->function.insideFunction.value[strlen(token->function.insideFunction.value) - 1] == '/') {
+                    strcpy(token->function.insideFunction.type, "regular expression");
+                } else if (isAlphabetic(token->function.insideFunction.value)) {
+                    strcpy(token->function.insideFunction.type, "variable");
+                    // NEED TO CHECK IF THE VARIABLE SELECTED IS A TYPE STRING.
+                } else {
+                    strcpy(token->error.message, "Didn't find the type.");
+                    strcpy(token->error.codePart, line);
+                    exit(1);
+                }
+                printf("Function keyword: %s\n", token->function.keywordFunction.value);
+                printf("Inside value: %s\n", token->function.insideFunction.value);
+                printf("Inside type: %s\n", token->function.insideFunction.type);
             }
-            printf("Function keyword: %s\n", token->function.keywordFunction.value);
-            printf("Inside value: %s\n", token->function.insideFunction.value);
-            printf("Inside type: %s\n", token->function.insideFunction.type);
+
         }
 
         // Variable
         if (startsWith(line, "str") || startsWith(line, "int") || startsWith(line, "bool") || startsWith(line, "obj") || startsWith(line, "enum") || startsWith(line, "regex") || startsWith(line, "auto") || startsWith(line, "")) {
-            char firstWord[50];
-            char variableName[50];
-            char equal[50];
+            char firstWord[STDMAX];
+            char variableName[STDMAX];
+            char equal[STDMAX];
             char *insideValue;
             if ((sscanf(line, "%s", firstWord) == 1 && strcmp(firstWord, "str") == 0) || strcmp(firstWord, "int") == 0 || strcmp(firstWord, "bool") == 0 || strcmp(firstWord, "obj") == 0 || strcmp(firstWord, "enum") == 0 || strcmp(firstWord, "regex") == 0 || strcmp(firstWord, "auto") == 0) {
                 if (strcmp(firstWord, "str") == 0) {
@@ -399,6 +472,8 @@ struct Token* lex(char *str) {
             printf("Variable name: %s\n", token->variable.nameVariable.value);
             printf("Variable operator: %s\n", token->variable.OperatorVariable.value);
             printf("Variable type: %s\n", token->variable.typeVariable.value);
+            printf("\nIf statement statement: %s\n", token->ifStatement.statementIfStatement.value);
+            printf("If statement code: %s\n", token->ifStatement.insideIfStatement.value);
         }
 
         line = strtok(NULL, ";\n");

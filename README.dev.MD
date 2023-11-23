@@ -8,8 +8,9 @@ If you're new to the Lumix developers team welcome! To understand where to code 
 > Lexer: ./src/compiler/lexer/ | Here you will find all what you need to code the lexer.
 > File Reader: ./src/compiler/fileReader/ | Here you will find all what is related to reading a Lumix type file.
 
-# Building Lumix
+# Building Lumix & Makefile
 This command is to build the project: `& "C:\Program Files (x86)\GnuWin32\bin\make.exe"` or the path to your `make.exe`.
+This command is to run Lumix using the Makefile: `& "C:\Program Files (x86)\GnuWin32\bin\make.exe" run`. Note that if you need to specify a Lumix file to run use `& "C:\Program Files (x86)\GnuWin32\bin\make.exe" run FILE=<File Path>`.
 
 ## Libraries
 First things first when we will get to the creation of libraries we will need to code this part in Lumix and not in C or any other programming languages. This will make it easier for others to create libraries for the programming language and also simplify there tasks. Note that they should still be able to add C to there library.
