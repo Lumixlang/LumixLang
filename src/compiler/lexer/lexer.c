@@ -117,39 +117,57 @@ struct Token* lex(char *str) {
         strcpy(token->ifStatement.insideIfStatement.value, codeInsideStatement);
         strcpy(token->ifStatement.statementIfStatement.value, insideStatement);
 
-        char keywordFunction[STDMAX];
-        char insideFunction[STDMAX];
-
         // Function
-        if (sscanf(line, "%49[^(\n] (%49[^)\n]", keywordFunction, insideFunction) == 2) {
-            if (!strcmp(keywordFunction, "if")) { // Doesn't collide with the keywords
-                strcpy(token->function.keywordFunction.value, keywordFunction);
-                strcpy(token->function.insideFunction.value, insideFunction);
-                if (startsEndsChar(token->function.insideFunction.value, '\'', '\'') || startsEndsChar(token->function.insideFunction.value, '"', '"')) {
-                    strcpy(token->function.insideFunction.type, "string");
-                } else if (isNumeric(token->function.insideFunction.value)) {
-                    strcpy(token->function.insideFunction.type, "integer");
-                } else if (isBoolean(token->function.insideFunction.value)) {
-                    strcpy(token->function.insideFunction.type, "boolean");
-                } else if (token->function.insideFunction.value[0] == '{' && token->function.insideFunction.value[strlen(token->function.insideFunction.value) - 1] == '}') {
-                    strcpy(token->function.insideFunction.type, "object");
-                } else if (token->function.insideFunction.value[0] == '[' && token->function.insideFunction.value[strlen(token->function.insideFunction.value) - 1] == ']') {
-                    strcpy(token->function.insideFunction.type, "enumeration");
-                } else if (token->function.insideFunction.value[0] == '/' && token->function.insideFunction.value[strlen(token->function.insideFunction.value) - 1] == '/') {
-                    strcpy(token->function.insideFunction.type, "regular expression");
-                } else if (isAlphabetic(token->function.insideFunction.value)) {
-                    strcpy(token->function.insideFunction.type, "variable");
-                    // NEED TO CHECK IF THE VARIABLE SELECTED IS A TYPE STRING.
-                } else {
-                    strcpy(token->error.message, "Didn't find the type.");
-                    strcpy(token->error.codePart, line);
-                    exit(1);
+        char *keywordFunction;
+        char *insideFunction = NULL;
+        int lLength = 0;
+        while (line[lLength] != '\0') {
+            lLength++;
+        }
+        for (int i = 0; i < lLength; i++) {
+            if (line[i] == '(') {
+                keywordFunction = malloc((i + 1) * sizeof(char));
+                for (int k = 0; k < i; k++) {
+                    keywordFunction[k] = line[k];
                 }
-                printf("Function keyword: %s\n", token->function.keywordFunction.value);
-                printf("Inside value: %s\n", token->function.insideFunction.value);
-                printf("Inside type: %s\n", token->function.insideFunction.type);
-            }
+                keywordFunction[i] = '\0';
 
+                int j = i + 1;
+                int insideLength = 0;
+                while (line[j] != ')' && line[j] != '\0') {
+                    insideFunction = realloc(insideFunction, (insideLength + 1) * sizeof(char));
+                    insideFunction[insideLength] = line[j];
+                    insideLength++;
+                    j++;
+                }
+            }
+        }
+        if (!strcmp(keywordFunction, "if") == 0) { // Doesn't collide with the keywords
+            strcpy(token->function.keywordFunction.value, keywordFunction);
+            strcpy(token->function.insideFunction.value, insideFunction);
+            if (startsEndsChar(token->function.insideFunction.value, '\'', '\'') || startsEndsChar(token->function.insideFunction.value, '"', '"')) {
+                strcpy(token->function.insideFunction.type, "string");
+            } else if (isNumeric(token->function.insideFunction.value)) {
+                strcpy(token->function.insideFunction.type, "integer");
+            } else if (isBoolean(token->function.insideFunction.value)) {
+                strcpy(token->function.insideFunction.type, "boolean");
+            } else if (token->function.insideFunction.value[0] == '{' && token->function.insideFunction.value[strlen(token->function.insideFunction.value) - 1] == '}') {
+                strcpy(token->function.insideFunction.type, "object");
+            } else if (token->function.insideFunction.value[0] == '[' && token->function.insideFunction.value[strlen(token->function.insideFunction.value) - 1] == ']') {
+                strcpy(token->function.insideFunction.type, "enumeration");
+            } else if (token->function.insideFunction.value[0] == '/' && token->function.insideFunction.value[strlen(token->function.insideFunction.value) - 1] == '/') {
+                strcpy(token->function.insideFunction.type, "regular expression");
+            } else if (isAlphabetic(token->function.insideFunction.value)) {
+                strcpy(token->function.insideFunction.type, "variable");
+                // NEED TO CHECK IF THE VARIABLE SELECTED IS A TYPE STRING.
+            } else {
+                strcpy(token->error.message, "Didn't find the type.");
+                strcpy(token->error.codePart, line);
+                exit(1);
+            }
+            printf("Function keyword: %s\n", token->function.keywordFunction.value);
+            printf("Inside value: %s\n", token->function.insideFunction.value);
+            printf("Inside type: %s\n", token->function.insideFunction.type);
         }
 
         // Variable
@@ -474,6 +492,8 @@ struct Token* lex(char *str) {
             printf("Variable type: %s\n", token->variable.typeVariable.value);
             printf("\nIf statement statement: %s\n", token->ifStatement.statementIfStatement.value);
             printf("If statement code: %s\n", token->ifStatement.insideIfStatement.value);
+            printf("\nFunction: %s\n", token->function.insideFunction.value);
+            printf("\nFunction: %s", token->function.keywordFunction.value);
         }
 
         line = strtok(NULL, ";\n");

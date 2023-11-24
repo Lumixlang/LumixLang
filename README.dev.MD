@@ -32,11 +32,16 @@ As we know the lexer is a important part of the programming language and in Lumi
 ## Syntax
 Here's an example of Lumix syntax.
 ```
-import std.io;
+import std.stdio;
 
 obj options = {
     "message": "Hello, world!"
 }
+/* In LON
+lon options = LON(
+    message: (Hello, world!)
+)
+*/
 
 color(const string, const color) {
     if (string && color) {
