@@ -211,3 +211,25 @@ char **tokenizeLines(char *str, int *numTokens) {
     *numTokens = count;
     return tokens;
 }
+
+char* trimString(const char* input) {
+    if (input == NULL) {
+        return NULL;
+    }
+    size_t length = strlen(input);
+    size_t start = 0;
+    while (start < length && isspace(input[start])) {
+        start++;
+    }
+    size_t end = length - 1;
+    while (end > start && isspace(input[end])) {
+        end--;
+    }
+    size_t trimmedLength = end - start + 1;
+    char* result = (char*)malloc((trimmedLength + 1) * sizeof(char));
+    if (result != NULL) {
+        strncpy(result, input + start, trimmedLength);
+        result[trimmedLength] = '\0';
+    }
+    return result;
+}

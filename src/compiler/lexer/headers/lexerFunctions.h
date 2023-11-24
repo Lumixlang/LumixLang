@@ -10,5 +10,6 @@ int startsEndsChar(char *data, char start, char end);
 char **tokenizeWithoutQuotes(const char *input);
 char* removeCommentsInsideStrings(const char* input);
 char **tokenizeLines(char *str, int *numTokens);
+char* trimString(const char* input);
 
 #endif
