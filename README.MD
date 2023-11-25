@@ -14,7 +14,7 @@ Make sure you have the following prerequisites installed on your system:
 
 ### Installation
 
-1. Install Lumix from the [original website](https://lumixlang.github.io/). Make sure it's the right for your platform.
+1. Install Lumix from the [original website](https://lumixlang.github.io/). Make sure it's the right version for your platform.
 2. The other steps are provided on the website.
 
 ## Running Lumix Files
